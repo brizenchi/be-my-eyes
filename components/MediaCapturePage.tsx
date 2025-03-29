@@ -192,9 +192,9 @@ export default function MediaCapturePage() {
           
           // 读出返回的内容
           if (data.data.response) {
-            const utterance = new SpeechSynthesisUtterance(data.data.response);
+            const utterance = new SpeechSynthesisUtterance(data.data.response.answer);
             utterance.lang = 'zh-CN'; // 设置为中文
-            console.log("Speaking response:", data.data.response);
+            console.log("Speaking response:", data.data.response.answer);
             window.speechSynthesis.speak(utterance);
           }
         } else {
