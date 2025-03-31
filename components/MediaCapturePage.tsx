@@ -136,22 +136,25 @@ export default function MediaCapturePage() {
       const voices = window.speechSynthesis.getVoices();
       console.log("Available voices:", voices);
       const chineseVoice = voices.find((v) => v.lang === "zh-CN");
-      if (!chineseVoice) {
-        setError("No Chinese voice available on this device");
-        console.error("No Chinese voice available");
+      const englishVoice = voices.find((v) => v.lang === "en-US");
+
+      let voice = chineseVoice ? chineseVoice : englishVoice;
+      if (!voice) {
+        setError("No suitable voice available on this device");
+        console.error("No suitable voice available");
         return;
       }
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "zh-CN";
-      utterance.voice = chineseVoice;
+      utterance.lang = voice.lang;
+      utterance.voice = voice;
       utterance.onstart = () => console.log("Speech started");
       utterance.onend = () => console.log("Speech ended");
       utterance.onerror = (event) => {
         console.error("Speech error:", event.error);
         setError(`Speech error: ${event.error}`);
       };
-      console.log("Speaking response:", text);
+      console.log(`Speaking response in ${voice.lang}:`, text);
       window.speechSynthesis.speak(utterance);
     };
 
